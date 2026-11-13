@@ -39,6 +39,9 @@ public class Plugin : BaseUnityPlugin
         _enabled = Config.Bind("General", "Enabled", true, "RTX Remix で描く。変更は再起動後に反映されます。");
         if (!_enabled.Value) return;
 
+        if (Config.Bind("General", "UpdateCheck", true, "起動時に GitHub で新しい版が出ていないかを確かめ、出ていれば知らせる。").Value)
+            StartCoroutine(UpdateChecker.Check(Logger));
+
         new HarmonyLib.Harmony("net.noeleve.HeberekeBunnyGardenRemix").Patch(
             HarmonyLib.AccessTools.Method(typeof(GB.GBSystem), "CalcFullScreenResolution"),
             postfix: new HarmonyLib.HarmonyMethod(typeof(Plugin), nameof(ClampFullScreen)));

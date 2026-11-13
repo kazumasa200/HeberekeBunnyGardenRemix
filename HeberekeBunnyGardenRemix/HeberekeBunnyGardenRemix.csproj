@@ -56,6 +56,7 @@
     <Reference Include="Assembly-CSharp"><HintPath>Assembly\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UniTask"><HintPath>Assembly\UniTask.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.UI"><HintPath>Assembly\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>Assembly\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 
 </Project>

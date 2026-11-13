@@ -100,6 +100,11 @@
 
 動作が重いときは、Alt+X のメニューで画質のプリセットを下げてみてください。
 
+## アップデートのお知らせ
+
+起動したとき、GitHub に新しい版が出ていれば、ダウンロードページを開くかを聞く画面が出ます。
+知らせが要らないときは、`BepInEx\config\net.noeleve.HeberekeBunnyGardenRemix.cfg` の `UpdateCheck` を `false` にしてください。
+
 ## 外し方
 
 ゲームのフォルダから、次を消します。
@@ -129,7 +134,7 @@ dotnet build HeberekeBunnyGardenRemix/HeberekeBunnyGardenRemix.csproj -c Release
 
 BepInEx 6 版は `-c Release_BIE6` でビルドします。
 
-- ゲームの DLL（`Assembly-CSharp.dll`、`UniTask.dll`、URP など）を `HeberekeBunnyGardenRemix/Assembly/` に置いてください（ゲームの `HEBEREKE BUNNY GARDEN_Data/Managed` から。リポジトリには入れていません）
+- ゲームの DLL（`Assembly-CSharp.dll`、`UniTask.dll`、`Unity.TextMeshPro.dll`、URP など）を `HeberekeBunnyGardenRemix/Assembly/` に置いてください（ゲームの `HEBEREKE BUNNY GARDEN_Data/Managed` から。リポジトリには入れていません）
 - `d3d11.dll` / `dxgi.dll` は `native/forwarders/build.cmd`（Visual Studio の C++ が要る）で作ります。Remix Plus の転送用の DLL をそのまま写した物です
 - Remix の設定は [docs/rtx.conf](docs/rtx.conf)
 
