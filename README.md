@@ -1,35 +1,39 @@
 # HeberekeBunnyGardenRemix
 
-![RTX Remix で描いた Stage09 の繁華街](docs/images/hero.jpg)
+![コンビニの窓ガラス。左が元のゲーム、右がこの Mod で、右だけ窓にキャラクターと店の明かりが映っている](docs/images/hero.webp)
 
-[へべれけ ばにーがーでん](https://store.steampowered.com/app/3575730/_/)（海外名: Merry Bunny Garden）の街を、**RTX Remix のパストレーシング**で描く BepInEx 5 用の Mod です。
+[へべれけ ばにーがーでん](https://store.steampowered.com/app/3575730/_/)（海外名: Merry Bunny Garden）の街を、RTX Remix のパストレーシングで描く BepInEx 5 用の Mod です。
 
-街の建物・道路・看板・照明は Remix が光を本当に追いかけて描き、キャラクターはゲームのトゥーンの見た目のまま、その上に描き重ねます。
+街の建物・道路・看板・照明は Remix が光の通り道を計算して描き、キャラクターはその上にゲームがトゥーンの見た目のまま描き重ねます。
 濡れた路面やガラスには周りの景色が映り込み、看板や街灯の光が壁や床を照らし、キャラクターは街に影を落とします。
 
 ## 見比べ
 
 左が元のゲーム、右がこの Mod です。
 
-**水たまりの映り込み** — 濡れた所に、建物や店の入口の明かりがそのまま映ります。
+### 水たまりの映り込み
 
-![水たまりの映り込み](docs/images/cmp_puddle.jpg)
+濡れた所に、建物や店の入口の明かりがそのまま映ります。
 
-**ネオンの街** — 看板やネオンの光が、周りの壁や地面を本物の光として照らします。
+![水たまりの映り込み](docs/images/cmp_puddle.webp)
 
-![ネオンの街](docs/images/cmp_neon.jpg)
+### ネオンの街
 
-**ガラスの映り込み** — 店の窓ガラスに、外の景色とキャラクターが映ります。
+看板やネオンの光が、周りの壁や地面を本物の光として照らします。
 
-![ガラスの映り込み](docs/images/cmp_window.jpg)
+![ネオンの街](docs/images/cmp_neon.webp)
 
-**路面の質感** — ひび割れたアスファルトのつやは、元のゲームの見た目を保っています。
+### 路面の質感
 
-![路面の質感](docs/images/cmp_road.jpg)
+ひび割れたアスファルトのつやは、元のゲームと同じに見えるようにしています。
 
-**路地のトラック** — ヘッドライトの光と影、ボディの映り込み。
+![路面の質感](docs/images/cmp_road.webp)
 
-![路地のトラック](docs/images/cmp_truck.jpg)
+### 路地のトラック
+
+ヘッドライトの光が路地を照らし、ボディには周りが映り込みます。
+
+![路地のトラック](docs/images/cmp_truck.webp)
 
 ## 必要なもの
 
@@ -43,52 +47,43 @@
 
 ## 導入方法
 
-ゲームのフォルダは、Steam のライブラリでゲームを右クリック →「管理」→「ローカルファイルを閲覧」で開けます。
+ゲームのフォルダは Steam のライブラリでゲームを右クリック →「管理」→「ローカルファイルを閲覧」で開けます。
 以下、このフォルダ（`HEBEREKE BUNNY GARDEN.exe` があるフォルダ）を「ゲームのフォルダ」と呼びます。
 
 ### 1. BepInEx 5 を入れる
 
 すでに入っている人（[HeberekeBunnyGardenFixMod](https://github.com/kazumasa200/HeberekeBunnyGardenMod) などを使っている人）は飛ばしてください。
 
-1. `BepInEx_win_x64_5.4.23.x.zip` を開き、**中身を全部**ゲームのフォルダに入れます
+1. `BepInEx_win_x64_5.4.23.x.zip` を開き、**中身を全部**ゲームのフォルダに入れます。赤枠のファイルが増えれば正しく入っています
+
+   ![BepInEx を入れたあとのゲームのフォルダ](docs/images/install/1-bepinex.webp)
+
 2. ゲームを一度起動して、タイトル画面まで進んだら終了します（`BepInEx` フォルダの中に `plugins` などが作られます）
 
 ### 2. Remix Plus を入れる
 
 1. `Remix_Plus_v2.0.0.zip` を開きます
-2. zip の中の **`game folder` → `.trex` フォルダの中身を全部**、ゲームのフォルダにコピーします（同じ名前のファイルは上書き）
+2. zip の中の `game folder` を開くと、`.trex` フォルダと `d3d9.dll` があります。使うのは **`.trex` フォルダの中身**です（`game folder` の `d3d9.dll` は使いません）
 
-   ```
-   Remix_Plus_v2.0.0.zip
-   └─ game folder
-      ├─ d3d9.dll          ← これは使いません
-      └─ .trex
-         ├─ d3d9.dll       ← ここから下を全部、ゲームのフォルダへ
-         ├─ NRD.dll
-         ├─ ...
-         └─ numos
-   ```
+   ![Remix Plus の zip の game folder](docs/images/install/2-remixplus-zip.webp)
+
+3. `.trex` フォルダを開き、**中のファイルとフォルダを全部**ゲームのフォルダにコピーします（同じ名前のファイルは上書き）
+
+   ![.trex フォルダの中身（このあとにも、まだファイルが続きます）](docs/images/install/2-trex.webp)
 
    一部だけコピーすると起動しません。`.trex` の中のフォルダ（`numos` など）も含めて全部コピーしてください。
 
 ### 3. この Mod を入れる
 
 1. [Releases](../../releases/latest) から `HeberekeBunnyGardenRemix-1.0.0.zip` をダウンロードします
-2. zip の**中身を全部**ゲームのフォルダに入れます（上書きしてよいか聞かれたら「はい」）
+2. zip の**中身を全部**ゲームのフォルダに入れます（上書きしてよいか聞かれたら「はい」）。`licenses` フォルダはライセンスの文書なので、入れなくてもかまいません
 
-入れ終わったゲームのフォルダは、次のようになります。
+   ![この Mod の zip の中身](docs/images/install/3-mod-zip.webp)
 
-```
-ゲームのフォルダ
-├─ HEBEREKE BUNNY GARDEN.exe
-├─ d3d9.dll、NRD.dll など   ← 2. の Remix Plus
-├─ d3d11.dll、dxgi.dll      ← 3. この Mod（ゲームの描画を Remix に通す）
-├─ rtx.conf                 ← 3. この Mod（Remix の設定）
-└─ BepInEx
-   └─ plugins
-      └─ HeberekeBunnyGardenRemix
-         └─ net.noeleve.HeberekeBunnyGardenRemix.dll
-```
+入れ終わったゲームのフォルダは、次のようになります（赤枠がこの手順で入れたファイルの一部。下にも Remix Plus のファイルが続きます）。
+`d3d11.dll`、`dxgi.dll`、`rtx.conf` はこの Mod、`d3d9.dll` は Remix Plus のファイルです。
+
+![入れ終わったゲームのフォルダ](docs/images/install/4-done.webp)
 
 ### 4. 起動する
 
@@ -100,10 +95,10 @@
 
 | キー | 動作 |
 |------|------|
-| **F8** | Remix の絵と、元のゲームの絵を切り替える（見比べ用） |
-| **Alt+X** | Remix のメニューを開く（画質のプリセットや DLSS など） |
+| F8 | Remix の絵と、元のゲームの絵を切り替える（見比べ用） |
+| Alt+X | Remix のメニューを開く（画質のプリセットや DLSS など） |
 
-画質が重いときは、Alt+X のメニューで画質のプリセットを下げてみてください。
+動作が重いときは、Alt+X のメニューで画質のプリセットを下げてみてください。
 
 ## 外し方
 
