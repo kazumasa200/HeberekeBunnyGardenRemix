@@ -292,6 +292,14 @@ internal sealed class SceneMirror : MonoBehaviour
                 _log.LogInfo($"Screen: {Screen.width}x{Screen.height} {Screen.fullScreenMode} fullScreen {Screen.fullScreen}");
                 continue;
             }
+            // 開発用（mod.hideui = 1 / 0）: ゲームの UI（Canvas）を隠す・戻す（README 用の絵を撮るため）
+            if (key == "mod.hideui")
+            {
+                // ステージの HUD と下のボタンの案内（フッター）は、ゲーム自身の切り替えで（Canvas を切るだけでは案内が残った）
+                foreach (var h in FindObjectsByType<GB.InGame.InGameHuds>(FindObjectsSortMode.None)) h.SetAllHudVsible(value == "0");
+                foreach (var c in FindObjectsByType<Canvas>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)) if (c.isRootCanvas) c.enabled = value == "0";
+                continue;
+            }
             if (key == "mod.passtest") { RemixCompositePass.Test = int.Parse(value); continue; }
             if (key == "mod.overlay") { RemixCompositePass.DrawOverlay = value != "0"; continue; }
             if (key == "mod.showchara") { _showCharacters = value != "0"; continue; }

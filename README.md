@@ -1,38 +1,157 @@
 # HeberekeBunnyGardenRemix
 
-へべれけばにーがーでん（Merry Bunny Garden）を RTX Remix で描く BepInEx 5 / 6 用の Mod（開発中）。
-環境だけをレイトレにする。ステージの街（不透明な静的メッシュ・テクスチャ・ノーマルマップ・粗さ・発光・光源・反射するガラス）とゲームの空と霧を Remix Plus で描き、
-その上にゲーム自身が、キャラクター（トゥーンのまま）とアイテムを描き直し、空・デカール（濡れた路面の汚れ）・パーティクル・半透明をいつもどおり描く。
-キャラクターは Remix では影だけを落とす。焼き込み（ライトマップ）にだけある照明と看板の明かりは、ライトマップを読んで Remix の光に戻す。
-最後にゲームの UI とポストプロセス（色調補正・ブルーム）が乗る。明るさは、ステージごとにライトマップから空の光と照明を読み取って合わせる。Stage01〜09 で、道順に沿ってゲームの HDR と比べてある（視点ごとの中央値でおよそ ±0.5 段以内）。
+![RTX Remix で描いた Stage09 の繁華街](docs/images/hero.jpg)
 
-## 動かし方（開発用）
+[へべれけ ばにーがーでん](https://store.steampowered.com/app/3575730/_/)（海外名: Merry Bunny Garden）の街を、**RTX Remix のパストレーシング**で描く BepInEx 5 用の Mod です。
 
-1. `dotnet build -c Release`（BepInEx 6 なら `-c Release_BIE6`）
-2. `HeberekeBunnyGardenRemix/bin/Release/netstandard2.1/net.noeleve.HeberekeBunnyGardenRemix.dll` を
-   `BepInEx/plugins/HeberekeBunnyGardenRemix/` に置く
-3. [Remix Plus v2.0.0](https://github.com/RemixProjGroup/dxvk-remix) の zip の `game folder\.trex` の**中身**を、
-   ゲームの exe と同じフォルダに置く（`d3d9.dll` ほか）
-4. `native/forwarders/build.cmd` でビルドした `d3d11.dll` と `dxgi.dll` も、同じフォルダに置く。
-   ゲームの D3D11 が Remix の DXVK の上で動くようになる
-5. [docs/rtx.conf](docs/rtx.conf) をゲームのフォルダに置く（Remix の入力用の窓を止める、夜の空と露出）
-6. Steam から起動する（exe を直接起動すると Steam API の初期化に失敗して進まない）
+街の建物・道路・看板・照明は Remix が光を本当に追いかけて描き、キャラクターはゲームのトゥーンの見た目のまま、その上に描き重ねます。
+濡れた路面やガラスには周りの景色が映り込み、看板や街灯の光が壁や床を照らし、キャラクターは街に影を落とします。
 
-Remix のメニューは Alt+X。設定（`rtx.conf`）とログ（`rtx-remix\logs\remix-dxvk.log`）はゲームのフォルダに置かれる。
-外すときは、ゲームのフォルダの `remixplus-installed.txt` に並んだファイルを消す。
+## 見比べ
 
-設計は [docs/design.md](docs/design.md)。
+左が元のゲーム、右がこの Mod です。
 
-## キー（開発用）
+**水たまりの映り込み** — 濡れた所に、建物や店の入口の明かりがそのまま映ります。
 
-- F8: Remix の絵とゲームの絵を切り替える
-- Ctrl+F8: ADV を飛ばして Stage01 に直接入る
-- F7: 今の場面が何で描かれているか（カメラ・Canvas・Renderer・光源）をログに書く
+![水たまりの映り込み](docs/images/cmp_puddle.jpg)
 
-## RTX Remix Toolkit で編集する
+**ネオンの街** — 看板やネオンの光が、周りの壁や地面を本物の光として照らします。
 
-メッシュと素材の hash は、起動のたびに同じ値になる（アセットの名前と中身から作る）。Remix の実行時メニューでキャプチャを取り、Toolkit で開いて置き換え（`rtx-remix\mods\<名前>\mod.usda`）を作れば、次の起動でも同じメッシュに当たる見込み。
+![ネオンの街](docs/images/cmp_neon.jpg)
 
-- 実際に Toolkit で置き換えを作って当たるかは、まだ確かめていない
-- 光源は Mod が Remix の API で作っているので、Toolkit の置き換えの対象にならない見込み
-- 照明の当てはめの結果は `BepInEx\cache\HeberekeBunnyGardenRemix\lamps_<場面>.txt` に保存される。消せば、次にその場面を読むときに作り直す
+**ガラスの映り込み** — 店の窓ガラスに、外の景色とキャラクターが映ります。
+
+![ガラスの映り込み](docs/images/cmp_window.jpg)
+
+**路面の質感** — ひび割れたアスファルトのつやは、元のゲームの見た目を保っています。
+
+![路面の質感](docs/images/cmp_road.jpg)
+
+**路地のトラック** — ヘッドライトの光と影、ボディの映り込み。
+
+![路地のトラック](docs/images/cmp_truck.jpg)
+
+## 必要なもの
+
+- Windows 10 / 11（64 ビット）
+- **レイトレーシングに対応した GPU**（NVIDIA GeForce RTX を推奨）と最新のドライバー
+  - 作者の環境は RTX 5090 です。それより弱い GPU での重さは確かめていません
+  - AMD / Intel の GPU でも Remix Plus 自体は動きますが、この Mod では試していません
+- Steam 版の へべれけ ばにーがーでん
+- [BepInEx 5.4.23](https://github.com/BepInEx/BepInEx/releases)（`BepInEx_win_x64_5.4.23.x.zip`）
+- [Remix Plus v2.0.0](https://github.com/RemixProjGroup/dxvk-remix/releases/tag/remix-plus-2.0.0)（`Remix_Plus_v2.0.0.zip`、約 470MB）
+
+## 導入方法
+
+ゲームのフォルダは、Steam のライブラリでゲームを右クリック →「管理」→「ローカルファイルを閲覧」で開けます。
+以下、このフォルダ（`HEBEREKE BUNNY GARDEN.exe` があるフォルダ）を「ゲームのフォルダ」と呼びます。
+
+### 1. BepInEx 5 を入れる
+
+すでに入っている人（[HeberekeBunnyGardenFixMod](https://github.com/kazumasa200/HeberekeBunnyGardenMod) などを使っている人）は飛ばしてください。
+
+1. `BepInEx_win_x64_5.4.23.x.zip` を開き、**中身を全部**ゲームのフォルダに入れます
+2. ゲームを一度起動して、タイトル画面まで進んだら終了します（`BepInEx` フォルダの中に `plugins` などが作られます）
+
+### 2. Remix Plus を入れる
+
+1. `Remix_Plus_v2.0.0.zip` を開きます
+2. zip の中の **`game folder` → `.trex` フォルダの中身を全部**、ゲームのフォルダにコピーします（同じ名前のファイルは上書き）
+
+   ```
+   Remix_Plus_v2.0.0.zip
+   └─ game folder
+      ├─ d3d9.dll          ← これは使いません
+      └─ .trex
+         ├─ d3d9.dll       ← ここから下を全部、ゲームのフォルダへ
+         ├─ NRD.dll
+         ├─ ...
+         └─ numos
+   ```
+
+   一部だけコピーすると起動しません。`.trex` の中のフォルダ（`numos` など）も含めて全部コピーしてください。
+
+### 3. この Mod を入れる
+
+1. [Releases](../../releases/latest) から `HeberekeBunnyGardenRemix-1.0.0.zip` をダウンロードします
+2. zip の**中身を全部**ゲームのフォルダに入れます（上書きしてよいか聞かれたら「はい」）
+
+入れ終わったゲームのフォルダは、次のようになります。
+
+```
+ゲームのフォルダ
+├─ HEBEREKE BUNNY GARDEN.exe
+├─ d3d9.dll、NRD.dll など   ← 2. の Remix Plus
+├─ d3d11.dll、dxgi.dll      ← 3. この Mod（ゲームの描画を Remix に通す）
+├─ rtx.conf                 ← 3. この Mod（Remix の設定）
+└─ BepInEx
+   └─ plugins
+      └─ HeberekeBunnyGardenRemix
+         └─ net.noeleve.HeberekeBunnyGardenRemix.dll
+```
+
+### 4. 起動する
+
+**Steam から**起動してください（exe を直接起動すると、ゲームが先に進みません）。
+
+初めての起動では、Remix がシェーダーを準備するので、画面が出るまで少し時間がかかります。ステージに入ると、街が Remix の絵に切り替わります。
+
+## 操作
+
+| キー | 動作 |
+|------|------|
+| **F8** | Remix の絵と、元のゲームの絵を切り替える（見比べ用） |
+| **Alt+X** | Remix のメニューを開く（画質のプリセットや DLSS など） |
+
+画質が重いときは、Alt+X のメニューで画質のプリセットを下げてみてください。
+
+## 外し方
+
+ゲームのフォルダから、次を消します。
+
+- `d3d11.dll` と `dxgi.dll`
+- `BepInEx\plugins\HeberekeBunnyGardenRemix` フォルダ
+
+これで元のゲームの描画に戻ります。Remix Plus のファイル（`d3d9.dll` など）は残っていても動作に影響しませんが、消したい場合は `.trex` からコピーしたファイルを消してください。
+
+## 気をつけること
+
+- キャラクターはトゥーンの見た目を保つため、元のゲームと同じ描き方です（影と映り込みだけ Remix が出します）
+- ADV パート（会話の場面）の背景は 1 枚の絵なので、見た目はほとんど変わりません
+- [HeberekeBunnyGardenFixMod](https://github.com/kazumasa200/HeberekeBunnyGardenMod) と一緒に使えます。ただし、その Mod の解像度の設定がモニターより大きいとき（スーパーサンプリング）は、モニターの解像度で描かれます
+- 元のゲームと見た目が違う所があります（Stage09 の広告の柱の絵など）
+- 不具合が起きたときは、`BepInEx\LogOutput.log` と `rtx-remix\logs\remix-dxvk.log` を添えて Issue で教えてください
+
+---
+
+## 開発者向け
+
+### ビルド
+
+```bash
+dotnet build HeberekeBunnyGardenRemix/HeberekeBunnyGardenRemix.csproj -c Release
+```
+
+- ゲームの DLL（`Assembly-CSharp.dll`、`UniTask.dll`、URP など）を `HeberekeBunnyGardenRemix/Assembly/` に置いてください（ゲームの `HEBEREKE BUNNY GARDEN_Data/Managed` から。リポジトリには入れていません）
+- `d3d11.dll` / `dxgi.dll` は `native/forwarders/build.cmd`（Visual Studio の C++ が要る）で作ります。Remix Plus の転送用の DLL をそのまま写した物です
+- Remix の設定は [docs/rtx.conf](docs/rtx.conf)
+
+### 開発用のスクリプト
+
+`tools/` に、起動・撮影・見比べのスクリプトがあります。使う前に `tools/local.env.example` を `tools/local.env` に写して、ゲームのフォルダを書いてください。
+
+- `tools/restart.sh [Stage01]`: ビルドした DLL を入れて、Steam から起動し直す（ステージ名を付けると、そのステージに直接入る）
+- `tools/remixconf.sh 'rtx.なにか = 値'` / `'mod.なにか = 値'`: 動いているゲームに設定を送る
+- `tools/shot.sh`: ゲームの中からスクリーンショットを撮る
+- F7: 今の場面が何で描かれているかをログに書く。Ctrl+F8: ADV を飛ばして Stage01 に入る
+
+設計と経緯は [docs/design.md](docs/design.md) にあります。
+
+### RTX Remix Toolkit で編集する
+
+メッシュと素材の hash は、起動のたびに同じ値になります（アセットの名前と中身から作る）。Remix のメニューでキャプチャを取り、Toolkit で置き換え（`rtx-remix\mods\<名前>\mod.usda`）を作れば、次の起動でも同じメッシュに当たる見込みです。ただし、実際に Toolkit で置き換えて当たるかはまだ確かめていません。光源は Mod が Remix の API で作っているので、置き換えの対象になりません。
+
+## クレジット
+
+- [Remix Plus](https://github.com/RemixProjGroup/dxvk-remix)（RTX Remix のランタイムの派生版）を使っています。`d3d11.dll` / `dxgi.dll` は Remix Plus のソース（MIT / zlib）をそのままビルドした物で、ライセンスは配布 zip の `licenses` フォルダにあります
+- [BepInEx](https://github.com/BepInEx/BepInEx)
