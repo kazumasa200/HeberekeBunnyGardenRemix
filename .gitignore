@@ -1,0 +1,9 @@
+bin/
+obj/
+*.user
+.vs/
+# ゲームの DLL（コンパイル時の参照だけ。配らない）
+HeberekeBunnyGardenRemix/Assembly/
+# この PC のパス（tools/local.env.example を写して作る）
+tools/local.env
+__pycache__/

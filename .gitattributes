@@ -1,0 +1,2 @@
+# シェルスクリプトは LF のまま（CRLF だと Git Bash で動かない）
+*.sh text eol=lf
