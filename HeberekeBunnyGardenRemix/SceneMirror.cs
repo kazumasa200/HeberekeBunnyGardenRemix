@@ -259,7 +259,7 @@ internal sealed class SceneMirror : MonoBehaviour
                 continue;
             }
             if (key == "mod.emissive") { Picker.LogEmissive(_log); continue; }
-            if (key == "mod.find") { Picker.LogFind(value, _log); _log.LogInfo($"カメラの cullingMask 0x{SceneCamera()?.cullingMask:X}"); continue; }
+            if (key == "mod.find") { Picker.LogFind(value, _log); _log.LogInfo($"カメラの cullingMask 0x{SceneCamera()?.cullingMask ?? 0:X}"); continue; }
             if (key == "mod.matinfo") { Picker.LogMaterials(value, _log); continue; }
             if (key == "mod.matset") { Picker.SetMaterial(value, _log); continue; }
             if (key == "mod.sunhighlight") { MaterialLibrary.SunHighlights = value != "0"; continue; }

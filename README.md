@@ -2,7 +2,7 @@
 
 ![コンビニの窓ガラス。左が元のゲーム、右がこの Mod で、右だけ窓にキャラクターと店の明かりが映っている](docs/images/hero.webp)
 
-[へべれけ ばにーがーでん](https://store.steampowered.com/app/3575730/_/)（海外名: Merry Bunny Garden）の街を、RTX Remix のパストレーシングで描く BepInEx 5 用の Mod です。
+[へべれけ ばにーがーでん](https://store.steampowered.com/app/3575730/_/)（海外名: Merry Bunny Garden）の街を、RTX Remix のパストレーシングで描く BepInEx 用の Mod です（BepInEx 5 版と 6 版があります）。
 
 街の建物・道路・看板・照明は Remix が光の通り道を計算して描き、キャラクターはその上にゲームがトゥーンの見た目のまま描き重ねます。
 濡れた路面やガラスには周りの景色が映り込み、看板や街灯の光が壁や床を照らし、キャラクターは街に影を落とします。
@@ -43,6 +43,7 @@
   - AMD / Intel の GPU でも Remix Plus 自体は動きますが、この Mod では試していません
 - Steam 版の へべれけ ばにーがーでん
 - [BepInEx 5.4.23](https://github.com/BepInEx/BepInEx/releases)（`BepInEx_win_x64_5.4.23.x.zip`）
+  - BepInEx 6（Unity Mono 版）を使っている人は、この Mod の BepInEx 6 版を使ってください。BepInEx 6 版は、作者の環境では動かして確かめていません
 - [Remix Plus v2.0.0](https://github.com/RemixProjGroup/dxvk-remix/releases/tag/remix-plus-2.0.0)（`Remix_Plus_v2.0.0.zip`、約 470MB）
 
 ## 導入方法
@@ -67,21 +68,20 @@
 
    ![Remix Plus の zip の game folder](docs/images/install/2-remixplus-zip.webp)
 
-3. `.trex` フォルダを開き、**中のファイルとフォルダを全部**ゲームのフォルダにコピーします（同じ名前のファイルは上書き）
+3. `.trex` フォルダを開き、Ctrl+A で**中のファイルとフォルダを全部**選んで、ゲームのフォルダにドラッグします（同じ名前のファイルは上書き）。`.trex` フォルダごとではなく、中身をゲームのフォルダの直下に入れます
 
-   ![.trex フォルダの中身（このあとにも、まだファイルが続きます）](docs/images/install/2-trex.webp)
+   ![.trex フォルダの中身を全部選んで、ゲームのフォルダにドラッグする](docs/images/install/2-trex.webp)
 
    一部だけコピーすると起動しません。`.trex` の中のフォルダ（`numos` など）も含めて全部コピーしてください。
 
 ### 3. この Mod を入れる
 
-1. [Releases](../../releases/latest) から `HeberekeBunnyGardenRemix-1.0.0.zip` をダウンロードします
+1. [Releases](../../releases/latest) から、BepInEx 5 なら `HeberekeBunnyGardenRemix_v1.0.0_BepInEx5.zip`、BepInEx 6 なら `HeberekeBunnyGardenRemix_v1.0.0_BepInEx6.zip` をダウンロードします
 2. zip の**中身を全部**ゲームのフォルダに入れます（上書きしてよいか聞かれたら「はい」）。`licenses` フォルダはライセンスの文書なので、入れなくてもかまいません
 
    ![この Mod の zip の中身](docs/images/install/3-mod-zip.webp)
 
-入れ終わったゲームのフォルダは、次のようになります（赤枠がこの手順で入れたファイルの一部。下にも Remix Plus のファイルが続きます）。
-`d3d11.dll`、`dxgi.dll`、`rtx.conf` はこの Mod、`d3d9.dll` は Remix Plus のファイルです。
+入れ終わったゲームのフォルダは、次のようになります。赤枠がこの手順（3.）で入れたファイルとフォルダで、ほかは BepInEx と Remix Plus のファイルです（下にも Remix Plus のファイルが続きます）。
 
 ![入れ終わったゲームのフォルダ](docs/images/install/4-done.webp)
 
@@ -126,6 +126,8 @@
 ```bash
 dotnet build HeberekeBunnyGardenRemix/HeberekeBunnyGardenRemix.csproj -c Release
 ```
+
+BepInEx 6 版は `-c Release_BIE6` でビルドします。
 
 - ゲームの DLL（`Assembly-CSharp.dll`、`UniTask.dll`、URP など）を `HeberekeBunnyGardenRemix/Assembly/` に置いてください（ゲームの `HEBEREKE BUNNY GARDEN_Data/Managed` から。リポジトリには入れていません）
 - `d3d11.dll` / `dxgi.dll` は `native/forwarders/build.cmd`（Visual Studio の C++ が要る）で作ります。Remix Plus の転送用の DLL をそのまま写した物です
